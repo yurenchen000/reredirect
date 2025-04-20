@@ -12,8 +12,6 @@ all: reredirect
 .PHONY: .force
 # Get version from git
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags 2>/dev/null || echo "0.1-unknown")
-# version.h:
-# 	@echo "#define REREDIRECT_VERSION \"$(GIT_VERSION)\"" > $@
 
 version.h: .force
 	@VERSION_CONTENT='#define REREDIRECT_VERSION "$(GIT_VERSION)"'; \

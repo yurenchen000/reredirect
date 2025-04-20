@@ -7,6 +7,9 @@ OBJS=reredirect.o ptrace.o attach.o
 # e.g. install to /usr with `make PREFIX=/usr`
 PREFIX=/usr/local
 
+all: reredirect
+
+.PHONY: .last_version
 # Get version from git
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags 2>/dev/null || echo "0.1-unknown")
 # version.h:
@@ -18,10 +21,6 @@ version.h: .last_version
 		echo "$(GIT_VERSION)" > $^; \
 		echo "Version updated to $(GIT_VERSION)"; \
 	fi
-
-.PHONY: .last_version
-
-all: reredirect
 
 reredirect: $(OBJS)
 

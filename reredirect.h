@@ -21,8 +21,9 @@
  * THE SOFTWARE.
  */
 #include "ptrace.h"
+#include "version.h"
 
-#define REREDIRECT_VERSION "0.1"
+// #define REREDIRECT_VERSION "0.1"
 
 int child_attach(pid_t pid, struct ptrace_child *child, child_addr_t *scratch_page);
 int child_detach(struct ptrace_child *child, child_addr_t scratch_page);

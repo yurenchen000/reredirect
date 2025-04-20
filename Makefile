@@ -9,16 +9,17 @@ PREFIX=/usr/local
 
 all: reredirect
 
-.PHONY: .last_version
+.PHONY: .force
 # Get version from git
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags 2>/dev/null || echo "0.1-unknown")
 # version.h:
 # 	@echo "#define REREDIRECT_VERSION \"$(GIT_VERSION)\"" > $@
 
-version.h: .last_version
-	@if [ "$(GIT_VERSION)" != "`cat $^ 2>/dev/null`" ]; then \
-		echo "#define REREDIRECT_VERSION \"$(GIT_VERSION)\"" > $@; \
-		echo "$(GIT_VERSION)" > $^; \
+version.h: .force
+	@VERSION_CONTENT='#define REREDIRECT_VERSION "$(GIT_VERSION)"'; \
+	EXISTING_CONTENT="$$(cat $@)"; \
+	if [ "$$EXISTING_CONTENT" != "$$VERSION_CONTENT" ]; then \
+		echo "$$VERSION_CONTENT" > $@; \
 		echo "Version updated to $(GIT_VERSION)"; \
 	fi
 

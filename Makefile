@@ -7,12 +7,26 @@ OBJS=reredirect.o ptrace.o attach.o
 # e.g. install to /usr with `make PREFIX=/usr`
 PREFIX=/usr/local
 
+# Get version from git
+GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags 2>/dev/null || echo "0.1-unknown")
+# version.h:
+# 	@echo "#define REREDIRECT_VERSION \"$(GIT_VERSION)\"" > $@
+
+version.h: .last_version
+	@if [ "$(GIT_VERSION)" != "`cat $^ 2>/dev/null`" ]; then \
+		echo "#define REREDIRECT_VERSION \"$(GIT_VERSION)\"" > $@; \
+		echo "$(GIT_VERSION)" > $^; \
+		echo "Version updated to $(GIT_VERSION)"; \
+	fi
+
+.PHONY: .last_version
+
 all: reredirect
 
 reredirect: $(OBJS)
 
 attach.o: reredirect.h ptrace.h
-reredirect.o: reredirect.h
+reredirect.o: reredirect.h version.h
 ptrace.o: ptrace.h $(wildcard arch/*.h)
 
 clean:

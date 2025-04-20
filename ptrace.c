@@ -115,7 +115,8 @@ struct syscall_numbers *ptrace_syscall_numbers(struct ptrace_child *child) {
 int ptrace_attach_child(struct ptrace_child *child, pid_t pid) {
     memset(child, 0, sizeof *child);
     child->pid = pid;
-    if (ptrace_command(child, PTRACE_ATTACH) < 0)
+    // if (ptrace_command(child, PTRACE_ATTACH) < 0)
+    if (ptrace_command(child, PTRACE_SEIZE) < 0)
         return -1;
 
     return ptrace_finish_attach(child, pid);
